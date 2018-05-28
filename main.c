@@ -3,7 +3,7 @@
 #include "client.h"
 
 void main(){
-    int op1, op2;
+    int op1 = 0, op2 = 0;
     int TAM = 0;
     int NIF;
     guitar *arr = LeGuitarras(&TAM);

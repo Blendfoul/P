@@ -39,7 +39,8 @@ int displayClientes(){
 int displayAlugueres(){
     int input, temp, status;
     
-    do{system("cls");
+    do{
+        system("cls");
         printf("1 - Criar aluguer\n2 - Concluir aluguer\n3 - Listar alugueres\n4 - Voltar\n");
         status = scanf("%d", &input);
     }while((temp = getchar()) != EOF && temp != '\n' && input < 1 || input > 4);
