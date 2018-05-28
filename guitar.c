@@ -1,16 +1,13 @@
 #include "assets.h"
 
-guitar *Nova_guitarra(int *TAM, guitar *arr, int flag)
+guitar *Nova_guitarra(int *TAM, guitar *arr, bool flag)
 {
     guitar *new = arr;
 
     new = (guitar *)realloc(new, sizeof(guitar) * ((*TAM) + 1));
 
     if (!new)
-    {
-        free(new);
         return arr;
-    }
     else if (flag)
     {
         (*TAM)++;
@@ -32,7 +29,7 @@ void preencheInfo(guitar *new, int *TAM)
     else
         new[(*TAM) - 1].id = 0;
     fflush(stdout);
-    getchar();
+    _getch();
     printf("Nome do Instrumento: ");
     gets(new[(*TAM) - 1].nome);
     printf("Valor do Instrumento: ");

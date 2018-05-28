@@ -11,17 +11,17 @@ void MostraInfo(guitar *member, int *TAM, int flag){
                     printf("\nID: %d\nNome: %s\nValor: %d\u20AC\nPreco dia: %d\u20AC\n", member[i].id, member[i].nome, member[i].pdia, member[i].valor);
             }
         }   
-    getch();
+    _getch();
 }
 
 void MostraGuitarra(guitar *member){
     printf("\nID: %d\nNome: %s\nValor: %d\u20AC\nPreco dia: %d\u20AC\nEstado: %d\n", member->id, member->nome, member->valor, member->pdia, member->state);
-    getch();
+    _getch();
 }
 
 void GuitarraAluguer(guitar *member){
     printf("\nNome: %s\nValor: %d euros\nPreco dia: %d euros\n", member->nome, member->valor, member->pdia);
-    getch();
+    _getch();
 }
 
 void MostraData(pAlu pointer){
@@ -80,19 +80,17 @@ void InfoCliente(pCli pointer){
                                                                         aux->inicio.mes, aux->inicio.ano, 
                                                                         aux->fim_m.dia, aux->fim_m.mes, 
                                                                         aux->fim_m.ano);
-            getch();
+            _getch();
             aux = aux->prox;
             }
         }
         
         pointer = (pCli)pointer->prox;
     }
-    getch();
+    _getch();
 }
 
 void InfoBanidos(pCli pointer){
-    pAlu aux;
-
     while(pointer){
         if(pointer->banido == true){
             printf("Nome: %s\nNIF: %d\n", pointer->nome, pointer->nif);
@@ -127,7 +125,7 @@ void InfoClienteSolo(pCli pointer, int *NIF){
         
         pointer = (pCli)pointer->prox;
     }
-    getch();
+    _getch();
 }
 
 void ListaAluguer(pCli pointer){
@@ -150,5 +148,5 @@ void ListaAluguer(pCli pointer){
     }
 
     printf("Fim!");
-    getch();
+    _getch();
 }

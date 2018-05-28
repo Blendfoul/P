@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include <locale.h>
 #include <conio.h>
 #include "guitar.h"
 #include "client.h"
@@ -16,7 +15,7 @@ int displayClientes();
 int displayAlugueres();
 int getNIF();
 
-guitar * Nova_guitarra(int *TAM, guitar *arr, int flag);
+guitar * Nova_guitarra(int *TAM, guitar *arr, bool flag);
 guitar * Apaga_Guitarra(guitar *member, int *TAM, int *id);
 guitar * LeGuitarras(int *TAM);
 void freeGuitar(guitar *arr);

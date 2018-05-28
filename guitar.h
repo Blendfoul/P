@@ -1,7 +1,7 @@
 #ifndef GUI_H
 #define GUI_H
 
-typedef struct Guitarra guitar, *pGui;
+typedef struct Guitarra guitar;
 
 struct Guitarra{
     int id;

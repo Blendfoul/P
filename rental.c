@@ -1,18 +1,20 @@
 #include "assets.h"
 
-void NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF){
+void NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF)
+{
     pAlu atual = NULL, new = NULL, aux = NULL;
-    
-    while(pointer != NULL && *NIF != pointer->nif)
-            pointer =(pCli) pointer->prox;
 
-    if(pointer){
+    while (pointer != NULL && *NIF != pointer->nif)
+        pointer = (pCli)pointer->prox;
+
+    if (pointer)
+    {
 
         atual = (pAlu)pointer->al;
 
-        new = (pAlu) malloc(sizeof(aluguer));
+        new = (pAlu)malloc(sizeof(aluguer));
 
-        if(!new)
+        if (!new)
             return;
 
         AluguerInfo(new, point, TAM);
@@ -20,33 +22,35 @@ void NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF){
         new->prox = pointer->al;
         pointer->al = new;
         pointer->nGuitar++;
-        
     }
 }
 
-void AluguerInfo(pAlu new, guitar *point, int *TAM){
+void AluguerInfo(pAlu new, guitar *point, int *TAM)
+{
     int pos;
     int id_guitar;
     int flag = false;
 
-    do{
-    for(pos = 0; pos < *TAM; pos++)
-        if(point[pos].state == 0)
-            MostraGuitarra(&point[pos]);
+    do
+    {
+        for (pos = 0; pos < *TAM; pos++)
+            if (point[pos].state == 0)
+                MostraGuitarra(&point[pos]);
 
-    printf("\n\nID da guitarra escolhida: ");
-    scanf("%d", &id_guitar);
+        printf("\n\nID da guitarra escolhida: ");
+        scanf("%d", &id_guitar);
 
-    for(pos = 0; pos < *TAM; pos++)
-        if(id_guitar == point[pos].id){
-            new->guitar = &point[pos];
-            flag = true;
-        }
-          
-        if(!flag)
+        for (pos = 0; pos < *TAM; pos++)
+            if (id_guitar == point[pos].id)
+            {
+                new->guitar = &point[pos];
+                flag = true;
+            }
+
+        if (!flag)
             printf("Guitarra nao encontrada!\n");
-    
-    }while(!flag);
+
+    } while (!flag);
 
     printf("Data de Inicio[DD/MM/AAAA]: ");
     scanf("%d/%d/%d", &new->inicio.dia, &new->inicio.mes, &new->inicio.ano);
@@ -57,28 +61,29 @@ void AluguerInfo(pAlu new, guitar *point, int *TAM){
     int custo = diferenca(&new->inicio, &new->fim_m) * new->guitar->pdia;
     printf("\nCusto previsto: %d euros.\n", custo);
 
-
     new->fim.dia = new->fim.mes = new->fim.ano = 0;
     new->guitar->state = 1;
-    new->prox = NULL;
-    getch();
+    _getch();
 }
 
-void ConcluirAlguer(pCli pointer, int *NIF){
+void ConcluirAlguer(pCli pointer, int *NIF)
+{
     pAlu iter = NULL;
     int delay;
     char damage;
 
-    while(pointer != NULL){
-        if(pointer->nif == *NIF)
+    while (pointer != NULL)
+    {
+        if (pointer->nif == *NIF)
             break;
         else
             pointer = pointer->prox;
     }
-    
+
     iter = pointer->al;
 
-    while(iter != NULL){
+    while (iter != NULL)
+    {
         iter = iter->prox;
     }
 
@@ -86,8 +91,9 @@ void ConcluirAlguer(pCli pointer, int *NIF){
     scanf("%d/%d/%d", &iter->fim.dia, &iter->fim.mes, &iter->fim.ano);
 
     delay = diferenca(&iter->fim_m, &iter->fim);
-    
-    if(delay > 0){
+
+    if (delay > 0)
+    {
         printf("Atraso: %d", delay);
         iter->guitar->state = 0;
         pointer->banido = true;
@@ -97,15 +103,16 @@ void ConcluirAlguer(pCli pointer, int *NIF){
 
     printf("Guitarra danificada[S/N]: ");
     scanf("%c", &damage);
-   
-    if(damage == 'S' || damage == 's'){
+
+    if (damage == 'S' || damage == 's')
+    {
         iter->guitar->state = 2;
         pointer->banido = true;
         pointer->rban = 2;
     }
-    else{
+    else
+    {
         iter->guitar->state = 0;
         pointer->banido = false;
     }
 }
-

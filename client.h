@@ -7,11 +7,13 @@ typedef struct Aluguer aluguer, *pAlu;
 typedef struct Client client, *pCli;
 typedef struct Date DATE;
 
-struct Date{
+struct Date
+{
     int dia, mes, ano;
 };
 
-struct Client{
+struct Client
+{
     char nome[50];
     int nif;
     bool banido;
@@ -21,7 +23,8 @@ struct Client{
     pCli prox;
 };
 
-struct Aluguer{
+struct Aluguer
+{
     guitar *guitar;
     DATE inicio;
     DATE fim;
