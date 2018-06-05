@@ -35,7 +35,7 @@ void freeClientes(pCli pointer);
 pCli LeClientes(guitar* pointer, int *TAM);
 int verificaNIF(pCli pointer, pCli new);
 
-pCli NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF);
+void NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF);
 void AluguerInfo(pAlu new, guitar *point, int *TAM);
 void GuitarraAluguer(guitar *member);
 void ConcluirAlguer(pCli pointer, int *NIF);
@@ -43,8 +43,7 @@ void ListaAluguer(pCli pointer);
 
 
 int diferenca(DATE *date, DATE *date1);
-int DiasNoMes(int mes, int ano);
-int AnoBisexto(int ano);
+int countLeapYears(DATE *d);
 
 void MostraData(pAlu pointer);
 

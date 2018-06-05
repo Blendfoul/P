@@ -29,7 +29,7 @@ void preencheInfo(guitar *new, int *TAM)
     else
         new[(*TAM) - 1].id = 0;
     printf("Nome do Instrumento: ");
-    scanf_s("\n%[^\n]s",new[(*TAM) - 1].nome, sizeof(new[(*TAM) - 1].nome));
+    scanf_s("\n%[^\n]s",new[(*TAM) - 1].nome, 50);
     printf("Valor do Instrumento: ");
     scanf("%d", &new[(*TAM) - 1].valor);
     printf("Preco por dia: ");

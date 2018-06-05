@@ -22,61 +22,49 @@ int verificaNIF(pCli pointer, pCli new)
     return 0;
 }
 
-int AnoBisexto(int ano)
+const int monthDays[12] = {31, 28, 31, 30, 31, 30,
+                           31, 31, 30, 31, 30, 31};
+ 
+// This function counts number of leap years before the
+// given date
+int countLeapYears(DATE *d)
 {
-    if ((ano % 4 == 0 && ano % 100 != 0) || ano % 400 == 0)
-        return 1;
-    return 0;
+    int years = d->ano;
+ 
+    // Check if the current year needs to be considered
+    // for the count of leap years or not
+    if (d->mes <= 2)
+        years--;
+ 
+    // An year is a leap year if it is a multiple of 4,
+    // multiple of 400 and not a multiple of 100.
+    return years / 4 - years / 100 + years / 400;
 }
-
-int DiasNoMes(int mes, int ano)
+ 
+// This function returns number of days between two given
+// dates
+int diferenca(DATE *dt1, DATE *dt2)
 {
-    int bisexto = AnoBisexto(ano);
-    /*               J   F   M   A   M   J   J   A   S   O   N   D */
-    int dias[2][12] = {{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-                       {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
-
-    if (mes < 0 || mes > 11 || ano < 1753)
-        return -1;
-
-    return dias[bisexto][mes];
-}
-
-int diferenca(DATE *date, DATE *date1)
-{
-    int ano, mes;
-    int totalDias = 0;
-
-    for (ano = date->ano; ano >= date1->ano; ano--)
-    {
-        if (ano == date->ano)
-        {
-            for (mes = date->mes; mes >= 1; mes--)
-            {
-                if (mes == date->mes)
-                    totalDias += date->dia;
-                else
-                    totalDias += DiasNoMes(mes, ano);
-            }
-        }
-        else if (ano == date1->ano)
-        {
-            for (mes = 12; mes >= date1->mes; mes--)
-            {
-                if (mes == date1->mes)
-                    totalDias += DiasNoMes(mes, ano) - date1->dia;
-                else
-                    totalDias += DiasNoMes(mes, ano);
-            }
-        }
-        else
-        {
-            for (mes = 12; mes >= 1; mes--)
-            {
-                totalDias += DiasNoMes(mes, ano);
-            }
-        }
-    }
-
-    return totalDias;
+    // COUNT TOTAL NUMBER OF DAYS BEFORE FIRST DATE 'dt1'
+ 
+    // initialize count using years and day
+    long int n1 = dt1->ano*365 + dt1->dia;
+ 
+    // Add days for months in given date
+    for (int i=0; i<dt1->mes - 1; i++)
+        n1 += monthDays[i];
+ 
+    // Since every leap year is of 366 days,
+    // Add a day for every leap year
+    n1 += countLeapYears(dt1);
+ 
+    // SIMILARLY, COUNT TOTAL NUMBER OF DAYS BEFORE 'dt2'
+ 
+    long int n2 = dt2->ano*365 + dt2->dia;
+    for (int i=0; i<dt2->mes - 1; i++)
+        n2 += monthDays[i];
+    n2 += countLeapYears(dt2);
+ 
+    // return difference between two counts
+    return (n2 - n1);
 }

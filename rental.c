@@ -1,41 +1,32 @@
 #include "assets.h"
 
-pCli NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF)
+void NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF)
 {
     pAlu atual = NULL, new = NULL, aux = NULL;
-	pCli aux1 = pointer;
-    while (aux1 != NULL && *NIF != aux1->nif)
-        aux1 = (pCli)aux1->prox;
+    while (pointer != NULL && *NIF != pointer->nif)
+        pointer = (pCli)pointer->prox;
 
-    if (aux1)
+    if (pointer)
     {
 
-        atual = (pAlu)aux1->al;
+        atual = (pAlu)pointer->al;
 
         new = (pAlu)malloc(sizeof(aluguer));
 
         if (!new)
-            return pointer;
+            return;
 
 
         AluguerInfo(new, point, TAM);
 
-        if(aux1->al == NULL)
-            aux1->al = new->prox;
-        else{
-            aux = aux1->al;
-            while(aux != NULL)
-                aux = (pAlu)aux->prox;
-            (pAlu) aux->prox = new;
-        }
-        aux1->nGuitar++;
-		return pointer;
+        new->prox = pointer->al; /*insere no inicio*/
+        pointer->al = new;
+        pointer->nGuitar++;
     }
     else{
         printf("Cliente nao encontrado!\n");
         _getch();
     }
-	return pointer;
 }
 
 
