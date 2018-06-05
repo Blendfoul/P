@@ -1,6 +1,6 @@
 #include "assets.h"
 
-guitar *Nova_guitarra(int *TAM, guitar *arr, bool flag)
+guitar * Nova_guitarra(int *TAM, guitar *arr, bool flag)
 {
     guitar *new = arr;
 
@@ -28,10 +28,8 @@ void preencheInfo(guitar *new, int *TAM)
         new[(*TAM) - 1].id = new[(*TAM) - 2].id + 1;
     else
         new[(*TAM) - 1].id = 0;
-    fflush(stdout);
-    _getch();
     printf("Nome do Instrumento: ");
-    gets(new[(*TAM) - 1].nome);
+    scanf_s("\n%[^\n]s",new[(*TAM) - 1].nome, sizeof(new[(*TAM) - 1].nome));
     printf("Valor do Instrumento: ");
     scanf("%d", &new[(*TAM) - 1].valor);
     printf("Preco por dia: ");
@@ -82,7 +80,7 @@ guitar *LeGuitarras(int *TAM)
     if (!gInfo)
     {
         printf("Erro ao aceder ao ficheiro\n");
-        exit(-1);
+		return NULL;
     }
 
     while (true)

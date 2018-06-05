@@ -23,21 +23,23 @@ void preencheInfo(guitar *new, int *TAM);
 void HistoricoGuitarra(pCli pointer);
 void MostraInfo(guitar *member, int *TAM, int flag);
 void GravaGuitarras(guitar *pointer, int *TAM);
+void MostraGuitarra(guitar *member);
 
 pCli NovoCliente(pCli pointer);
 pCli RemoverCliente(pCli pointer, int *NIF);
 void ClienteInfo(pCli new);
+void InfoCliente(pCli pointer);
 void InfoClienteSolo(pCli pointer, int *NIF);
 void GravaClientes(pCli pointer);
 void freeClientes(pCli pointer);
 pCli LeClientes(guitar* pointer, int *TAM);
 int verificaNIF(pCli pointer, pCli new);
 
-void NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF);
+pCli NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF);
 void AluguerInfo(pAlu new, guitar *point, int *TAM);
 void GuitarraAluguer(guitar *member);
 void ConcluirAlguer(pCli pointer, int *NIF);
-void ListaAluger(pCli pointer);
+void ListaAluguer(pCli pointer);
 
 
 int diferenca(DATE *date, DATE *date1);

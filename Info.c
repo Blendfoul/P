@@ -143,7 +143,6 @@ void ListaAluguer(pCli pointer){
                 aux = aux->prox;
             }
         }
-
         pointer = pointer->prox;
     }
 

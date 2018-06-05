@@ -1,35 +1,49 @@
 #include "assets.h"
 
-void NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF)
+pCli NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF)
 {
     pAlu atual = NULL, new = NULL, aux = NULL;
+	pCli aux1 = pointer;
+    while (aux1 != NULL && *NIF != aux1->nif)
+        aux1 = (pCli)aux1->prox;
 
-    while (pointer != NULL && *NIF != pointer->nif)
-        pointer = (pCli)pointer->prox;
-
-    if (pointer)
+    if (aux1)
     {
 
-        atual = (pAlu)pointer->al;
+        atual = (pAlu)aux1->al;
 
         new = (pAlu)malloc(sizeof(aluguer));
 
         if (!new)
-            return;
+            return pointer;
+
 
         AluguerInfo(new, point, TAM);
 
-        new->prox = pointer->al;
-        pointer->al = new;
-        pointer->nGuitar++;
+        if(aux1->al == NULL)
+            aux1->al = new->prox;
+        else{
+            aux = aux1->al;
+            while(aux != NULL)
+                aux = (pAlu)aux->prox;
+            (pAlu) aux->prox = new;
+        }
+        aux1->nGuitar++;
+		return pointer;
     }
+    else{
+        printf("Cliente nao encontrado!\n");
+        _getch();
+    }
+	return pointer;
 }
+
 
 void AluguerInfo(pAlu new, guitar *point, int *TAM)
 {
     int pos;
     int id_guitar;
-    int flag = false;
+    bool flag = false;
 
     do
     {
@@ -63,6 +77,7 @@ void AluguerInfo(pAlu new, guitar *point, int *TAM)
 
     new->fim.dia = new->fim.mes = new->fim.ano = 0;
     new->guitar->state = 1;
+    new->prox = NULL;
     _getch();
 }
 
@@ -82,37 +97,41 @@ void ConcluirAlguer(pCli pointer, int *NIF)
 
     iter = pointer->al;
 
-    while (iter != NULL)
+    if (iter == NULL)
     {
-        iter = iter->prox;
-    }
-
-    printf("Data de Fim [DD/MM/AAAA]: ");
-    scanf("%d/%d/%d", &iter->fim.dia, &iter->fim.mes, &iter->fim.ano);
-
-    delay = diferenca(&iter->fim_m, &iter->fim);
-
-    if (delay > 0)
-    {
-        printf("Atraso: %d", delay);
-        iter->guitar->state = 0;
-        pointer->banido = true;
-        pointer->rban = 1;
+        printf("Este cliente nao tem alugueres ativos!");
+        _getch();
         return;
-    }
-
-    printf("Guitarra danificada[S/N]: ");
-    scanf("%c", &damage);
-
-    if (damage == 'S' || damage == 's')
-    {
-        iter->guitar->state = 2;
-        pointer->banido = true;
-        pointer->rban = 2;
     }
     else
     {
-        iter->guitar->state = 0;
-        pointer->banido = false;
+        printf("Data de Fim [DD/MM/AAAA]: ");
+        scanf("%d/%d/%d", &iter->fim.dia, &iter->fim.mes, &iter->fim.ano);
+
+        delay = diferenca(&iter->fim_m, &iter->fim);
+
+        if (delay > 0)
+        {
+            printf("Atraso: %d", delay);
+            iter->guitar->state = 0;
+            pointer->banido = true;
+            pointer->rban = 1;
+            return;
+        }
+
+        printf("Guitarra danificada[S/N]: ");
+        scanf("%c", &damage);
+
+        if (damage == 'S' || damage == 's')
+        {
+            iter->guitar->state = 2;
+            pointer->banido = true;
+            pointer->rban = 2;
+        }
+        else
+        {
+            iter->guitar->state = 0;
+            pointer->banido = false;
+        }
     }
 }

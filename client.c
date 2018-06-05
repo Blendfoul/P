@@ -36,10 +36,8 @@ pCli NovoCliente(pCli pointer)
 
 void ClienteInfo(pCli new)
 {
-    fflush(stdin);
-    _getch();
-    printf("Nome do cliente: ");
-    gets(new->nome);
+	printf("Nome do cliente: ");
+    scanf_s("\n%[^\n]s", new->nome, sizeof(new->nome));
     printf("NIF do cliente: ");
     scanf("%9d", &new->nif);
     new->banido = false;

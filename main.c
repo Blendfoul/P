@@ -63,7 +63,7 @@ void main()
 
             case 1:
                 NIF = getNIF();
-                NovoAluguer(list, arr, &TAM, &NIF);
+                list = NovoAluguer(list, arr, &TAM, &NIF);
                 break;
             case 2:
                 NIF = getNIF();
