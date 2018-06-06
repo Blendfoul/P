@@ -36,7 +36,7 @@ pCli NovoCliente(pCli pointer)
 
 void ClienteInfo(pCli new)
 {
-	printf("Nome do cliente: ");
+    printf("Nome do cliente: ");
     scanf_s("\n%[^\n]s", new->nome, 50);
     printf("NIF do cliente: ");
     scanf("%9d", &new->nif);
@@ -72,88 +72,16 @@ pCli RemoverCliente(pCli pointer, int *NIF)
     return pointer;
 }
 
-pCli LeClientes(guitar *point, int *TAM)
+pCli LeClientesBanidos(pCli pointer)
 {
-    FILE *cInfo, *bInfo;
-    pCli new = NULL, pointer = NULL, aux = NULL;
-    pAlu novo = NULL;
-    int total, size;
-    int a1, a2;
-    char b1[50];
+    FILE *bInfo;
+    pCli new = NULL, aux = NULL, atual = pointer;
+    int size, total;
 
     bInfo = fopen("Banidos.dat", "rb");
-    cInfo = fopen("clientes.txt", "r");
-    if (!bInfo && !cInfo)
-    {
+
+    if (!bInfo)
         return pointer;
-    }
-
-    while (true)
-    {
-        int ret = fscanf(cInfo, "%d %d %[a-z A-Z ^\n]s\n", &a1, &a2, b1);
-
-        if (ret == 3)
-        {
-            new = (pCli)malloc(sizeof(client));
-            if (!new)
-                return pointer;
-
-            strcpy(new->nome, b1);
-            new->nif = a1;
-            new->nGuitar = a2;
-            new->banido = false;
-            if (new->nGuitar > 0)
-            {
-                for (int i = 0; i < new->nGuitar; i++)
-                {
-                    novo = (pAlu)malloc(sizeof(aluguer));
-                    if (!novo)
-                        return pointer;
-
-                    fscanf(cInfo, "%d %d %d %d %d %d %d %d %d %d %d\n", &a1, &a2,
-                           &novo->inicio.dia, &novo->inicio.mes, &novo->inicio.ano,
-                           &novo->fim_m.dia, &novo->fim_m.mes, &novo->fim_m.ano,
-                           &novo->fim.dia, &novo->fim.mes, &novo->fim.ano);
-
-                    for (int i = 0; i < *TAM; i++)
-                        if (a1 == point[i].id)
-                        {
-                            novo->guitar = &point[i];
-                        }
-
-                    novo->prox = new->al;
-                    new->al = novo;
-                }
-            }
-            else
-            {
-                new->al = NULL;
-                new->prox = NULL;
-            }
-            if (pointer == NULL)
-                pointer = new;
-            else
-            {
-                aux = pointer;
-                while (aux->prox != NULL)
-                    aux = (pCli)aux->prox;
-                (pCli) aux->prox = new;
-            }
-            fscanf(cInfo, "\n");
-        }
-
-        else if (ret == EOF)
-        {
-            break;
-        }
-
-        else
-        {
-            printf("Não encontrado!\n");
-        }
-    }
-
-    fclose(cInfo);
 
     fseek(bInfo, 0, SEEK_END);
     size = ftell(bInfo);
@@ -161,9 +89,9 @@ pCli LeClientes(guitar *point, int *TAM)
     if (size)
     {
 
-        fseek(bInfo, sizeof(int), SEEK_END);
+        fseek(bInfo, -sizeof(int), SEEK_END);
         fread(&total, sizeof(int), 1, bInfo);
-
+    
         for (int i = total - 1; i >= 0; i--)
         {
             fseek(bInfo, sizeof(client) * i, SEEK_SET);
@@ -196,29 +124,115 @@ pCli LeClientes(guitar *point, int *TAM)
     return pointer;
 }
 
-void GravaClientes(pCli pointer)
+pCli LeClientesAtivos(guitar *point, int *TAM)
 {
-    FILE *cInfo, *bInfo;
+    FILE *cInfo;
+    pCli new = NULL, pointer = NULL, aux = NULL;
+    pAlu novo = NULL;
+    int returnedValue, a1, a2;
+
+    cInfo = fopen("clientes.txt", "r");
+
+    if (!cInfo)
+    {
+        return NULL;
+    }
+
+    fseek(cInfo, 0, SEEK_END);
+    
+    if (ftell(cInfo) != 0)
+    {
+        rewind(cInfo);
+
+        while (true)
+        {
+            new = malloc(sizeof(client));
+
+            if (!new)
+                return NULL;
+
+            returnedValue = fscanf(cInfo, "%d %d %[a-z A-Z ^\n]s", &new->nif, &new->nGuitar, new->nome);
+
+            if (returnedValue == 3)
+            {
+                new->banido = false;
+                new->prox = NULL; 
+                new->al = NULL;
+
+
+                if (new->nGuitar > 0)
+                {
+                    while (true)
+                    {
+                        novo = (pAlu)malloc(sizeof(aluguer));
+
+                        if (!novo)
+                            return pointer;
+
+                        returnedValue = fscanf(cInfo, "%d %d %d %d %d %d %d %d %d %d %d", &a1, &a2,
+                                               &novo->inicio.dia, &novo->inicio.mes, &novo->inicio.ano,
+                                               &novo->fim_m.dia, &novo->fim_m.mes, &novo->fim_m.ano,
+                                               &novo->fim.dia, &novo->fim.mes, &novo->fim.ano);
+
+                        if (returnedValue == 11)
+                        {
+                            for (int i = 0; i < *TAM; i++)
+                                if (a1 == point[i].id)
+                                {
+                                    novo->guitar = &point[i];
+                                }
+
+                            novo->prox = new->al;
+                            new->al = novo;
+                        }
+                        else
+                        {
+                            free(novo);
+                            break;
+                        }
+                    }
+                }
+
+                if (pointer == NULL)
+                    pointer = new;
+                else
+                {
+                    aux = pointer;
+                    while (aux->prox != NULL)
+                        aux = (pCli)aux->prox;
+                    (pCli) aux->prox = new;
+                }
+            }
+
+            else if (returnedValue == EOF)
+            {
+                free(new);
+                break;
+            }
+
+            else
+            {
+                printf("Não encontrado!\n");
+            }
+        }
+    }
+
+    fclose(cInfo);
+    return pointer;
+}
+
+void GravaClientesAtivos(pCli pointer)
+{
+    FILE *cInfo;
     pAlu ite = NULL;
-    int total = 0;
 
     cInfo = fopen("clientes.txt", "wt");
     if (!cInfo)
         return;
 
-    bInfo = fopen("Banidos.dat", "wb");
-    if (!bInfo)
-        return;
-
     while (pointer != NULL)
     {
-        if (pointer->banido == true)
-        {
-            fwrite(pointer, sizeof(client), 1, bInfo);
-            pointer = (pCli)pointer->prox;
-            total++;
-        }
-        else
+        if (!pointer->banido)
         {
             fprintf(cInfo, "%d %d %s", (int)pointer->nif, (int)pointer->nGuitar, pointer->nome);
 
@@ -226,17 +240,37 @@ void GravaClientes(pCli pointer)
 
             while (ite != NULL)
             {
-                fprintf(cInfo, "%d %d %d %d %d %d %d %d %d %d %d", (int)(ite)->guitar->id, (int)(ite)->guitar->state, (int)(ite)->inicio.dia, (int)(ite)->inicio.mes, (int)(ite)->inicio.ano, (int)(ite)->fim_m.dia, (int)(ite)->fim_m.mes, (int)(ite)->fim_m.ano, (int)(ite)->fim.dia, (int)(ite)->fim.mes, (int)(ite)->fim.ano);
+                fprintf(cInfo, "\n%d %d %d %d %d %d %d %d %d %d %d", (int)(ite)->guitar->id, (int)(ite)->guitar->state, (int)(ite)->inicio.dia, (int)(ite)->inicio.mes, (int)(ite)->inicio.ano, (int)(ite)->fim_m.dia, (int)(ite)->fim_m.mes, (int)(ite)->fim_m.ano, (int)(ite)->fim.dia, (int)(ite)->fim.mes, (int)(ite)->fim.ano);
                 ite = (ite)->prox;
             }
-
-            pointer = (pCli)pointer->prox;
         }
+        pointer = (pCli)pointer->prox;
+    }
+    fclose(cInfo);
+}
+
+void GravaClientesBanidos(pCli pointer)
+{
+    FILE *bInfo;
+    int total = 0;
+
+    bInfo = fopen("banidos.dat", "wb");
+
+    if (!bInfo)
+        return;
+
+    while (pointer != NULL)
+    {
+        if (pointer->banido)
+        {
+            fwrite(pointer, sizeof(client), 1, bInfo);
+            total++;
+        }
+        pointer = (pCli)pointer->prox;
     }
 
     fwrite(&total, sizeof(int), 1, bInfo);
 
-    fclose(cInfo);
     fclose(bInfo);
 }
 

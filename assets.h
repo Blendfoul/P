@@ -30,9 +30,11 @@ pCli RemoverCliente(pCli pointer, int *NIF);
 void ClienteInfo(pCli new);
 void InfoCliente(pCli pointer);
 void InfoClienteSolo(pCli pointer, int *NIF);
-void GravaClientes(pCli pointer);
+void GravaClientesAtivos(pCli pointer);
+void GravaClientesBanidos(pCli pointer);
 void freeClientes(pCli pointer);
-pCli LeClientes(guitar* pointer, int *TAM);
+pCli LeClientesAtivos(guitar *point, int *TAM);
+pCli LeClientesBanidos(pCli pointer);
 int verificaNIF(pCli pointer, pCli new);
 
 void NovoAluguer(pCli pointer, guitar *point, int *TAM, int *NIF);

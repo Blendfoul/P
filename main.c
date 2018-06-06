@@ -5,7 +5,9 @@ void main()
     int op1, op2, NIF;
     int TAM = 0;
     guitar *arr = LeGuitarras(&TAM);
-    pCli list = LeClientes(arr, &TAM);
+    pCli list = LeClientesAtivos(arr, &TAM);
+    
+    list = LeClientesBanidos(list);
 
     do
     {
@@ -84,7 +86,8 @@ void main()
     } while (op1 != 4);
 
     GravaGuitarras(arr, &TAM);
-    GravaClientes(list);
+    GravaClientesAtivos(list);
+    GravaClientesBanidos(list);
     freeGuitar(arr);
     freeClientes(list);
 }
